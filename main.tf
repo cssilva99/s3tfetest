@@ -18,3 +18,15 @@ resource "aws_s3_bucket_versioning" "tfstate"{
     status = "Enabled"
   }
 }
+
+data "aws_iam_policy_document" "assume"{
+  statement{
+    effect = "Allow"
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+resource "aws_iam_role" "terraform"{
+  name_prefix = "terraform"
+  assume_role_policy = data.aws_iam_policy_document.assume.json
+}
